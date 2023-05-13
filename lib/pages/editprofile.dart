@@ -27,7 +27,7 @@ class _EditProfilePageState extends State<StatefulWidget>{
             children: <Widget>[
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/images/profile_picture.jpg'),
+                backgroundImage: AssetImage('assets/images/profile.jpg'),
               ),
               SizedBox(height: 20),
               Text(
