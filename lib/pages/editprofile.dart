@@ -71,6 +71,21 @@ class _EditProfilePageState extends State<StatefulWidget>{
                         key: _formKey,
                           child: Column(
                             children: [
+                              Align(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(0,10, 20, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Data diri',
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color:  Colors.black),
+                                      ),
+                                    ]
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
                               Container(
                                 child: TextField(
                                   decoration: theme().textInputDecoration('Email', 'Masukan email anda'),
@@ -92,6 +107,21 @@ class _EditProfilePageState extends State<StatefulWidget>{
                                   decoration: theme().textInputDecoration('No HP', 'Masukan nomor HP'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
+                              ),
+                              SizedBox(height: 10.0),
+                              Align(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(0,10, 20, 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Alamat',
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color:  Colors.black),
+                                      ),
+                                    ]
+                                  ),
+                                ),
                               ),
                               SizedBox(height: 10.0),
                               Container(

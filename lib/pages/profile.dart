@@ -7,6 +7,7 @@ import 'package:tubesflutter/pages/signup.dart';
 import '../Theme/theme.dart';
 import 'editprofile.dart';
 import 'landingpage.dart';
+import 'signin.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -97,7 +98,7 @@ class _ProfilePageState extends State<StatefulWidget> {
                 title: Text('Keluar'),
                 trailing: Icon(LineIcons.arrowLeft),
                 onTap: () {
-                  // TODO: Implement settings screen
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
                 },
               ),
             ],

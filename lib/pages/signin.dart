@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../Theme/theme.dart';
+import 'checkout.dart';
 import 'landingpage.dart';
 import 'profile.dart';
 import 'signup.dart';
@@ -77,7 +78,7 @@ class _SignInPageState extends State<SignInPage>{
                                   ),
                                   onPressed: (){
                                     //After successful login we will redirect to profile page. Let's create profile page now
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingPage()));
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckOutPage()));
                                   },
                                 ),
                               ),
