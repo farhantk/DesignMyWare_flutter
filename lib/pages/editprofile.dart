@@ -6,6 +6,7 @@ import 'package:tubesflutter/pages/signup.dart';
 
 import '../Theme/theme.dart';
 import 'landingpage.dart';
+import 'profile.dart';
 
 class EditProfilePage extends StatefulWidget{
   const EditProfilePage({super.key});
@@ -19,9 +20,19 @@ class _EditProfilePageState extends State<StatefulWidget>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black45),
+          onPressed: () {
+             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingPage()));
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

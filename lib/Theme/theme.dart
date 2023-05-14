@@ -27,15 +27,16 @@ class theme{
     ]);
   }
 
-  BoxDecoration buttonBoxDecoration(BuildContext context) {
+  BoxDecoration buttonBoxDecoration(BuildContext context, {Color? fillColor}) {
     Color c1 = Theme.of(context).primaryColor;
     
     return BoxDecoration(
       boxShadow: [
         BoxShadow(color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)
       ],
-      color: c1,
+      color: fillColor ?? c1,
       borderRadius: BorderRadius.circular(50),
+      border: Border.all(color: c1, width: 2.0),
     );
   }
 
