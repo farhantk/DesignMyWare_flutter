@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 import '../Theme/theme.dart';
+import '../providers/auth_provider.dart';
 import 'checkout.dart';
 import 'landingpage.dart';
 import 'profile.dart';
@@ -17,8 +20,29 @@ class SignInPage extends StatefulWidget{
 
 class _SignInPageState extends State<SignInPage>{
   Key _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    handleSignIn() async{
+      if(await authProvider.SignIn(
+        email: emailController.text, 
+        password: passwordController.text, 
+      )){
+        Navigator.pushNamed(context, '/home');
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: HexColor('#ED2B2A'),
+            content: Text(
+              'Gagal masuk',
+              textAlign: TextAlign.center,
+            ),
+          )
+        );
+      }
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -54,15 +78,17 @@ class _SignInPageState extends State<SignInPage>{
                           child: Column(
                             children: [
                               Container(
-                                child: TextField(
+                                child: TextFormField(
+                                  controller: emailController,
                                   decoration: theme().textInputDecoration('Email', 'Masukan email anda'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
+                                child: TextFormField(
                                   obscureText: true,
+                                  controller: passwordController,
                                   decoration: theme().textInputDecoration('Kata sandi', 'Masukan kata sandi'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
@@ -76,10 +102,7 @@ class _SignInPageState extends State<SignInPage>{
                                     padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
                                     child: Text('Masuk', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                                   ),
-                                  onPressed: (){
-                                    //After successful login we will redirect to profile page. Let's create profile page now
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckOutPage()));
-                                  },
+                                  onPressed: handleSignIn,
                                 ),
                               ),
                               Container(

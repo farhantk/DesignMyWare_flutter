@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:tubesflutter/pages/editprofile.dart';
+import 'package:tubesflutter/pages/landingpage.dart';
+import 'package:tubesflutter/pages/signup.dart';
+import 'package:tubesflutter/providers/auth_provider.dart';
 
+import 'pages/signin.dart';
 import 'pages/splash_screen.dart';
 
 void main() {
@@ -13,16 +19,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: primary_color,
-        accentColor: accent_color,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider())
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        routes: {
+          '/': (context)=>SplashScreen(),
+          '/signin': (context)=>SignInPage(),
+          '/signup': (context)=>SignUpPage(),
+          '/home': (context)=>LandingPage(),
+          '/editprofile': (context)=>EditProfilePage(),
+        },
+        theme: ThemeData(
+          primaryColor: primary_color,
+          accentColor: accent_color,
 
 
-        primarySwatch: Colors.blue,
+          primarySwatch: Colors.blue,
+        ),
       ),
-      home: const SplashScreen(title: 'Flutter Demo Home Page'),
     );
   }
 }

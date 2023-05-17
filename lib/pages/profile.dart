@@ -2,9 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:tubesflutter/pages/signup.dart';
+import 'package:tubesflutter/providers/auth_provider.dart';
 
 import '../Theme/theme.dart';
+import '../models/user_model.dart';
 import 'editprofile.dart';
 import 'landingpage.dart';
 import 'signin.dart';
@@ -19,6 +22,8 @@ class _ProfilePageState extends State<StatefulWidget> {
   Key _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    UserModel? user = authProvider.user;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -33,7 +38,7 @@ class _ProfilePageState extends State<StatefulWidget> {
               ),
               SizedBox(height: 20),
               Text(
-                'John Doe',
+                '${user?.name}',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -41,7 +46,7 @@ class _ProfilePageState extends State<StatefulWidget> {
               ),
               SizedBox(height: 10),
               Text(
-                'email@gmail.com',
+                '${user?.email}',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey[600],

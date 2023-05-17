@@ -6,9 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tubesflutter/pages/signin.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key, required this.title});
-
-  final String title;
+  const SplashScreen({super.key});
   
   @override
   State<SplashScreen> createState() => _SplashScreenState();

@@ -1,5 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:tubesflutter/pages/landingpage.dart';
+import 'package:tubesflutter/providers/auth_provider.dart';
 
 import '../Theme/theme.dart';
 import 'profile.dart';
@@ -15,8 +19,33 @@ class SignUpPage extends StatefulWidget{
 class _SignUpPageState extends State<StatefulWidget>{
   double _headerHeight = 250;
   Key _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+  TextEditingController confirmPasswordController = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    handleSignUp() async{
+      if(await authProvider.SignUp(
+        name: nameController.text, 
+        email: emailController.text, 
+        password: passwordController.text, 
+        confirmPassword: confirmPasswordController.text
+      )){
+        Navigator.pushNamed(context, '/home');
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: HexColor('#ED2B2A'),
+            content: Text(
+              'Gagal mendaftar',
+              textAlign: TextAlign.center,
+            ),
+          )
+        );
+      }
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -53,30 +82,34 @@ class _SignUpPageState extends State<StatefulWidget>{
                           child: Column(
                             children: [
                               Container(
-                                child: TextField(
+                                child: TextFormField(
+                                  controller: nameController,
                                   decoration: theme().textInputDecoration('Nama', 'Masukan nama anda'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
+                                child: TextFormField(
+                                  controller: emailController,
                                   decoration: theme().textInputDecoration('Email', 'Masukan email anda'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
+                                child: TextFormField(
                                   obscureText: true,
+                                  controller: passwordController,
                                   decoration: theme().textInputDecoration('Kata sandi', 'Masukan kata sandi'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
+                                child: TextFormField(
                                   obscureText: true,
+                                  controller: confirmPasswordController,
                                   decoration: theme().textInputDecoration('Konfirmasi kata sandi', 'Masukan kata sandi lagi'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
@@ -90,10 +123,7 @@ class _SignUpPageState extends State<StatefulWidget>{
                                     padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
                                     child: Text('Daftar', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                                   ),
-                                  onPressed: (){
-                                    //After successful login we will redirect to profile page. Let's create profile page now
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
-                                  },
+                                  onPressed: handleSignUp,
                                 ),
                               ),
                               Container(

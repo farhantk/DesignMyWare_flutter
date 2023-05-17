@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:tubesflutter/pages/signin.dart';
 
+import '../models/user_model.dart';
+import '../providers/auth_provider.dart';
 import 'profile.dart';
 import 'transaction.dart';
 
@@ -32,6 +35,8 @@ class _LandingPageState extends State<StatefulWidget>{
   ];
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel? user = authProvider.user;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
