@@ -1,37 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:tubesflutter/providers/transaction_provider.dart';
+import 'package:tubesflutter/services/transaction_service.dart';
 
 import '../Theme/theme.dart';
+import '../models/user_model.dart';
+import '../providers/auth_provider.dart';
 import 'landingpage.dart';
 import 'track.dart';
 
-class TransactionPage extends StatefulWidget{
-  const TransactionPage({super.key});
-  @override
-  State<StatefulWidget> createState() => _TransactionPageState();
+class TransactionPage extends StatefulWidget {
+  const TransactionPage({Key? key}) : super(key: key);
 
+  @override
+  _TransactionPageState createState() => _TransactionPageState();
 }
 
-
-class _TransactionPageState extends State<StatefulWidget>{
+class _TransactionPageState extends State<TransactionPage> {
   List<String> categories = [
-    'Category 1',
-    'Category 2',
-    'Category 3',
-    'Category 4',
+    'Menunggu konfirmasi',
+    'Diproses',
+    'Dikirim',
+    'Selesai',
   ];
 
-  Map<String, List<String>> transactions = {
-    'Category 1': ['Transaction 1', 'Transaction 2', 'Transaction 3', 'Transaction 34', 'Transaction 33', 'Transaction 35'],
-    'Category 2': ['Transaction 4', 'Transaction 5', 'Transaction 6'],
-    'Category 3': ['Transaction 7', 'Transaction 8', 'Transaction 9'],
-    'Category 4': ['Transaction 10', 'Transaction 11', 'Transaction 12'],
-  };
-
-  String currentCategory = 'Category 1';
-
+  String currentCategory = 'Menunggu konfirmasi';
+    String convertDateFormat(String originalDate) {
+    // Parsing tanggal awal
+    DateTime dateTime = DateTime.parse(originalDate);
+    
+    // Format tanggal yang diinginkan
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    
+    // Mengonversi dan mengembalikan tanggal yang diformat
+    return formatter.format(dateTime);
+  }
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+    TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
+
+    Future<void> getTransactions() async {
+      await transactionProvider.Showtransaction(
+        id: user.id!,
+        token: user.token!,
+      );
+    }
+    
+    dynamic order = transactionProvider.order;
+    List<dynamic> orders = [];
+    if (order != null) {
+      orders = order['orders'];
+    }
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,15 +76,16 @@ class _TransactionPageState extends State<StatefulWidget>{
                     margin: EdgeInsets.fromLTRB(8, 45, 8, 15),
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     decoration: currentCategory == categories[index]
-                      ? theme().buttonBoxDecoration(context, fillColor: Colors.white)
-                      : theme().buttonBoxDecoration(context),
+                        ? theme().buttonBoxDecoration(context,
+                            fillColor: Colors.white)
+                        : theme().buttonBoxDecoration(context),
                     child: Text(
                       categories[index],
                       style: TextStyle(
                         color: currentCategory == categories[index]
-                          ? Theme.of(context).primaryColor
-                          : Colors.white,
-                        fontSize: 20, 
+                            ? Theme.of(context).primaryColor
+                            : Colors.white,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -71,78 +95,112 @@ class _TransactionPageState extends State<StatefulWidget>{
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount: transactions[currentCategory]!.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Card(
-                      elevation: 3, // Set elevation to 0 to remove the default Card shadow
-                      margin: EdgeInsets.only(bottom: 16.0),
-                      child: InkWell(
-                        onTap: () {
-                          // handle track button tap
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(transactions[currentCategory]![index],
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20, 
-                                      fontWeight: FontWeight.w500,
-                                    )
-                                  ),
-                                  Text('5x Kaos'),
-                                  Text('5x Kemeja'),
-                                  Text('5x jaket'),
-                                  Text('5x tumbler'),
-                                ]
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text('Rp. 10000000'),
-                                  SizedBox(height: 8),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 0),
-                                    decoration: theme().buttonBoxDecoration(context),
-                                    child: ElevatedButton(
-                                      style: theme().buttonStyle(),
-                                      child: Text(
-                                        'Lacak',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15, 
-                                          fontWeight: FontWeight.normal,
-                                        ),
+            child: FutureBuilder(
+              future: getTransactions(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  return ListView.builder(
+                    padding: EdgeInsets.all(8),
+                    itemCount: orders
+                        .where((transaction) =>
+                            transaction['status'] == currentCategory)
+                        .length,
+                    itemBuilder: (context, index) {
+                      dynamic transaction = orders
+                          .where((transaction) =>
+                              transaction['status'] == currentCategory)
+                          .toList()[index];
+                      dynamic pesanan = transaction['pesanan'];
+                      List<dynamic> pesananDetails =
+                          pesanan['pesanan_details'];
+                      if(transaction != null){
+                        return Column(
+                          children: [
+                            Card(
+                              elevation: 3,
+                              margin: EdgeInsets.only(bottom: 16.0),
+                              child: InkWell(
+                                onTap: () {
+                                  // handle track button tap
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${transaction['status']} | ${convertDateFormat(transaction['created_at'])}',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                          for (var pesananDetail
+                                              in pesananDetails)
+                                            Text(
+                                                '${pesananDetail['jumlah_pesanan']}x ${pesananDetail['product']['name']}',
+                                            ),
+                                          Text(
+                                            'Rp. ${pesanan['total_price']}',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () {
-                                        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => TrackPage()));
-                                      },
-                                    ),
-                                    
+                                      if (transaction['status'] == 'Dikirim')
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            decoration: theme().buttonBoxDecoration(context),
+                                            child: ElevatedButton(
+                                              style: theme().buttonStyle(),
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
+                                                child: Text('Lacak', style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white),),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  '/track',
+                                                  arguments: {
+                                                    'courierName': transaction['courier']['name'],
+                                                    'receiptCode': transaction['receipt_code'],
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                  ],
-                );
+                            ),
+                            const SizedBox(height: 8.0),
+                          ],
+                        );
+                      }
+                    },
+                  );
+                }
               },
             ),
           ),
-
         ],
       ),
     );

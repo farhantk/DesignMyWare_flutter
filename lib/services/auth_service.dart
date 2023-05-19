@@ -101,9 +101,7 @@ class AuthService{
     );
     if(response.statusCode == 200){
       var data = jsonDecode(response.body);
-      print(data);
       UserModel user = UserModel.fromJson(data);
-      print(user);
       return user;
     }else{
       var errorResponse = jsonDecode(response.body);

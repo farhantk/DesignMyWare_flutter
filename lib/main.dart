@@ -8,6 +8,8 @@ import 'package:tubesflutter/providers/auth_provider.dart';
 
 import 'pages/signin.dart';
 import 'pages/splash_screen.dart';
+import 'pages/track.dart';
+import 'providers/transaction_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,7 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider())
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => TransactionProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
           '/signup': (context)=>SignUpPage(),
           '/home': (context)=>LandingPage(),
           '/editprofile': (context)=>EditProfilePage(),
+          '/track': (context)=>TrackPage(courierName: '', receipt_code: '',),
         },
         theme: ThemeData(
           primaryColor: primary_color,
