@@ -8,8 +8,10 @@ import '../services/transaction_service.dart';
 
 class TransactionProvider with ChangeNotifier{
   dynamic _order;
+  dynamic _track;
 
   dynamic get order => _order;
+  dynamic get track => _track;
 
   set order(dynamic order){
     _order = order;
@@ -36,13 +38,17 @@ class TransactionProvider with ChangeNotifier{
     required String receipt_code, 
     required String token, 
   }) async {
+
     try{
+      print('hey');
       dynamic track = await TransactionService().Track(
         courierName: courierName,
         receipt_code: receipt_code,
         token: token,
       );
-      return track;
+      _track = track;
+      print(_track);
+      return true;
     }catch(e){
       return false;
     }

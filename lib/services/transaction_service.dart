@@ -37,7 +37,7 @@ class TransactionService{
       'Content-Type': 'application/json',
       'Authorization': token};
     var body = jsonEncode({
-      'courierName': courierName,
+      'courier': courierName,
       'receipt_code': receipt_code,
     });
     var response = await http.post(
@@ -47,11 +47,12 @@ class TransactionService{
       );
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print(response.body);
+      print(json.decode(response.body));
       return json.decode(response.body);
     } else {
       var errorResponse = jsonDecode(response.body);
       var errorMessage = errorResponse['message'];
+      print(errorMessage);
       throw Exception('Show transaction failed: $errorMessage');
     }
   }

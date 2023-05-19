@@ -22,21 +22,30 @@ class TrackPage extends StatefulWidget{
 
 }
 
-class _TrackPageState extends State<StatefulWidget>{
+class _TrackPageState extends State<TrackPage> {
+  
+  
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     String courierName = arguments['courierName'];
     String receiptCode = arguments['receiptCode'];
 
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    Future<void> getTrack() async {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     UserModel user = authProvider.user;
-    TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
- 
-    Future<dynamic> trackData = transactionProvider.Track(courierName: 'courierName', receipt_code: 'receiptCode', token: 'user.token');
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
 
+    await transactionProvider.Track(
+      courierName: courierName,
+      receipt_code: receiptCode,
+      token: user.token ?? '',
+    );
+  }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -44,11 +53,50 @@ class _TrackPageState extends State<StatefulWidget>{
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black45),
           onPressed: () {
-             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingPage()));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LandingPage()),
+            );
           },
         ),
       ),
-    
+      body: FutureBuilder(
+        future: getTrack(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error occurred while fetching tracking data.'),
+            );
+          } else {
+            dynamic track = Provider.of<TransactionProvider>(context).track;
+            if (track != null && track.containsKey('data')) {
+              List<dynamic> tracks = track['data']['history'];
+              if (tracks.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: tracks.length,
+                  itemBuilder: (context, index) {
+                    dynamic historyEntry = tracks[index];
+                    String date = historyEntry['date'];
+                    String desc = historyEntry['desc'];
+
+                    return ListTile(
+                      title: Text(date),
+                      subtitle: Text(desc),
+                    );
+                  },
+                );
+              }
+            }
+            return Center(
+              child: Text('No tracking information available.'),
+            );
+          }
+        },
+      ),
     );
   }
 }
