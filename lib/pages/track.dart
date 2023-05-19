@@ -35,17 +35,17 @@ class _TrackPageState extends State<TrackPage> {
     String receiptCode = arguments['receiptCode'];
 
     Future<void> getTrack() async {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-    UserModel user = authProvider.user;
-    TransactionProvider transactionProvider =
-        Provider.of<TransactionProvider>(context, listen: false);
+      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+      UserModel user = authProvider.user;
+      TransactionProvider transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
 
-    await transactionProvider.Track(
-      courierName: courierName,
-      receipt_code: receiptCode,
-      token: user.token ?? '',
-    );
-  }
+      await transactionProvider.Track(
+        courierName: courierName,
+        receipt_code: receiptCode,
+        token: user.token ?? '',
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -69,31 +69,56 @@ class _TrackPageState extends State<TrackPage> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Error occurred while fetching tracking data.'),
+              child: Text('Terjadi kesalahan saat mengambil data pelacakan.'),
             );
           } else {
             dynamic track = Provider.of<TransactionProvider>(context).track;
             if (track != null && track.containsKey('data')) {
-              List<dynamic> tracks = track['data']['history'];
-              if (tracks.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: tracks.length,
-                  itemBuilder: (context, index) {
-                    dynamic historyEntry = tracks[index];
-                    String date = historyEntry['date'];
-                    String desc = historyEntry['desc'];
+              List<dynamic> tracks = track['data']['history']; // Inisialisasi variabel tracks
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    Text(
+                      '${track['data']['summary']['courier']}',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '${track['data']['summary']['awb']}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: tracks.length,
+                      itemBuilder: (context, index) {
+                        dynamic historyEntry = tracks[index];
+                        String date = historyEntry['date'];
+                        String desc = historyEntry['desc'];
 
-                    return ListTile(
-                      title: Text(date),
-                      subtitle: Text(desc),
-                    );
-                  },
-                );
-              }
+                        return ListTile(
+                          title: Text(date),
+                          subtitle: Text(desc),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Center(
+                child: Text('Tidak ada informasi pelacakan yang tersedia.'),
+              );
             }
-            return Center(
-              child: Text('No tracking information available.'),
-            );
           }
         },
       ),
