@@ -1,23 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cart List',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: CartPage(),
-    );
-  }
-}
+import '../models/user_model.dart';
+import '../providers/auth_provider.dart';
 
 class CartPage extends StatefulWidget {
+  const CartPage({Key? key}) : super(key: key);
+
   @override
   _CartPageState createState() => _CartPageState();
 }
@@ -52,10 +43,9 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel? user = authProvider.user;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cart Page'),
-      ),
       body: ListView.builder(
         itemCount: pesananDetails.length,
         itemBuilder: (context, index) {

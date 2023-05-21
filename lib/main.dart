@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:tubesflutter/pages/cart_list.dart';
 import 'package:tubesflutter/pages/editprofile.dart';
 import 'package:tubesflutter/pages/landingpage.dart';
 import 'package:tubesflutter/pages/signup.dart';
@@ -29,18 +30,20 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         routes: {
-          '/': (context)=>SplashScreen(),
-          '/signin': (context)=>SignInPage(),
-          '/signup': (context)=>SignUpPage(),
-          '/home': (context)=>LandingPage(),
-          '/editprofile': (context)=>EditProfilePage(),
-          '/track': (context)=>TrackPage(courierName: '', receipt_code: '',),
+          '/': (context) => SplashScreen(),
+          '/signin': (context) => SignInPage(),
+          '/signup': (context) => SignUpPage(),
+          '/home': (context) => LandingPage(),
+          '/editprofile': (context) => EditProfilePage(),
+          '/cart': (context) => CartPage(),
+          '/track': (context) => TrackPage(
+                courierName: '',
+                receipt_code: '',
+              ),
         },
         theme: ThemeData(
           primaryColor: primary_color,
           accentColor: accent_color,
-
-
           primarySwatch: Colors.blue,
         ),
       ),
