@@ -53,4 +53,19 @@ class TransactionProvider with ChangeNotifier{
       return false;
     }
   }
+  Future<dynamic> Finish({
+    required int orderId, 
+    required String token, 
+  }) async {
+
+    try{
+      dynamic finish = await TransactionService().Finish(
+        orderId: orderId,
+        token: token,
+      );
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
 }

@@ -42,7 +42,27 @@ class _TransactionPageState extends State<TransactionPage> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
     TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
+    handleFinish(int orderId) async{
 
+      bool response = await transactionProvider.Finish(
+        token: user.token!,
+        orderId: orderId,
+      );
+
+      if(response){
+        Navigator.pushNamed(context, '/home');
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: HexColor('#ED2B2A'),
+            content: Text(
+              'Gagal mengganti profil anda',
+              textAlign: TextAlign.center,
+            ),
+          )
+        );
+      }
+    }
     Future<void> getTransactions() async {
       await transactionProvider.Showtransaction(
         id: user.id!,
@@ -202,16 +222,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                 primary: Theme.of(context).primaryColor,
                                                 padding: EdgeInsets.all(5.0),
                                               ),
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                  context,
-                                                  '/track',
-                                                  arguments: {
-                                                    'courierName': transaction['courier']['name'],
-                                                    'receiptCode': transaction['receipt_code'],
-                                                  },
-                                                );
-                                              },
+                                              onPressed: () => handleFinish(transaction['id']),
                                               child: Text(
                                                 'Sampai',
                                                 style: TextStyle(

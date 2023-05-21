@@ -96,6 +96,10 @@ class _TrackPageState extends State<TrackPage> {
                       ),
                     ),
                     SizedBox(height: 20),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      child: Divider(thickness: 1),
+                    ),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
