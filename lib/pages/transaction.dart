@@ -161,16 +161,17 @@ class _TransactionPageState extends State<TransactionPage> {
                                         ],
                                       ),
                                       if (transaction['status'] == 'Dikirim')
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                      Row(
                                         children: [
                                           Container(
-                                            decoration: theme().buttonBoxDecoration(context),
+                                            margin: EdgeInsets.symmetric(horizontal: 1.0),
                                             child: ElevatedButton(
-                                              style: theme().buttonStyle(),
-                                              child: Padding(
-                                                padding: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                                                child: Text('Lacak', style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white),),
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                primary: Theme.of(context).primaryColor,
+                                                padding: EdgeInsets.all(5.0),
                                               ),
                                               onPressed: () {
                                                 Navigator.pushNamed(
@@ -182,6 +183,41 @@ class _TransactionPageState extends State<TransactionPage> {
                                                   },
                                                 );
                                               },
+                                              child: Text(
+                                                'Lacak',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10), // Jarak antara dua tombol
+                                          Container(
+                                            margin: EdgeInsets.symmetric(horizontal: 1.0),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                primary: Theme.of(context).primaryColor,
+                                                padding: EdgeInsets.all(5.0),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  '/track',
+                                                  arguments: {
+                                                    'courierName': transaction['courier']['name'],
+                                                    'receiptCode': transaction['receipt_code'],
+                                                  },
+                                                );
+                                              },
+                                              child: Text(
+                                                'Sampai',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
