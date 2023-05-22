@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tubesflutter/services/auth_service.dart';
 
+import '../models/user_model.dart';
 import '../services/cart_service.dart';
 
 class CartProvider with ChangeNotifier {
@@ -18,10 +21,11 @@ class CartProvider with ChangeNotifier {
     required String token,
   }) async {
     try {
-      dynamic cart = await cartService().ShowCart(
+      dynamic cart = await CartService().ShowCart(
         token: token,
       );
       _cart = cart;
+      notifyListeners();
       return true;
     } catch (e) {
       return false;
