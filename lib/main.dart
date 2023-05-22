@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tubesflutter/pages/editprofile.dart';
 import 'package:tubesflutter/pages/landingpage.dart';
 import 'package:tubesflutter/pages/signup.dart';
+import 'package:tubesflutter/pages/widgets/navbar.dart';
 import 'package:tubesflutter/providers/auth_provider.dart';
 
 import 'pages/signin.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           '/signin': (context)=>SignInPage(),
           '/signup': (context)=>SignUpPage(),
           '/home': (context)=>LandingPage(),
+          // '/home': (context)=>NavBar(),
           '/editprofile': (context)=>EditProfilePage(),
           '/track': (context)=>TrackPage(courierName: '', receipt_code: '',),
         },

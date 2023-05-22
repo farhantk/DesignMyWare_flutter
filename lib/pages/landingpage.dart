@@ -1,31 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:tubesflutter/pages/homepage.dart';
 import 'package:tubesflutter/pages/signin.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
 import 'profile.dart';
 import 'transaction.dart';
 
-class LandingPage extends StatefulWidget{
+class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
   @override
   State<StatefulWidget> createState() => _LandingPageState();
-
 }
 
-class _LandingPageState extends State<StatefulWidget>{
+class _LandingPageState extends State<StatefulWidget> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Home',
-      style: optionStyle,
-    ),
+    // Text(
+    //   'Home',
+    //   style: optionStyle,
+    // ),
+    HomePage(),
     Text(
       'Likes',
       style: optionStyle,
