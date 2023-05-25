@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:tubesflutter/providers/transaction_provider.dart';
 
 import '../Theme/theme.dart';
 import '../providers/auth_provider.dart';
@@ -25,11 +26,13 @@ class _SignInPageState extends State<SignInPage>{
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
     handleSignIn() async{
       if(await authProvider.SignIn(
         email: emailController.text, 
         password: passwordController.text, 
-      )){
+      )& await transactionProvider.ShowExpedition()){
+        print(transactionProvider.expedition);
         Navigator.pushNamed(context, '/home');
       }else{
         ScaffoldMessenger.of(context).showSnackBar(

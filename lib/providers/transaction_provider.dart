@@ -9,9 +9,11 @@ import '../services/transaction_service.dart';
 class TransactionProvider with ChangeNotifier {
   dynamic _order;
   dynamic _track;
+  dynamic _expedition;
 
   dynamic get order => _order;
   dynamic get track => _track;
+  dynamic get expedition => _expedition;
 
   set order(dynamic order) {
     _order = order;
@@ -33,7 +35,16 @@ class TransactionProvider with ChangeNotifier {
       return false;
     }
   }
-
+  Future<dynamic> ShowExpedition() async {
+    try {
+      dynamic expedition = await TransactionService().ShowExpedition();
+      _expedition = expedition;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  
   Future<dynamic> Track({
     required String courierName,
     required String receipt_code,
@@ -62,6 +73,38 @@ class TransactionProvider with ChangeNotifier {
       dynamic finish = await TransactionService().Finish(
         orderId: orderId,
         token: token,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  Future<dynamic> Checkout({
+    required int id,
+    required String token,
+    required String name,
+    required String phoneNumber,
+    required String province,
+    required String city,
+    required String subdistrict,
+    required String ward,
+    required String street,
+    required String zip,
+    required String courier,
+  }) async {
+    try {
+      dynamic checkout = await TransactionService().Checkout(
+        id: id,
+        token: token,
+        name: name, 
+        phoneNumber:phoneNumber,
+        province:province,
+        city:city,
+        subdistrict:subdistrict,
+        ward:ward,
+        street:street,
+        zip:zip,
+        courier:courier,
       );
       return true;
     } catch (e) {

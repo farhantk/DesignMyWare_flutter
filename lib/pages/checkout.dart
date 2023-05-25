@@ -1,16 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:tubesflutter/pages/signup.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../Theme/theme.dart';
+import '../models/user_model.dart';
+import '../providers/auth_provider.dart';
+import '../providers/transaction_provider.dart';
 import 'landingpage.dart';
 import 'profile.dart';
-
+import 'package:http/http.dart' as http;
 
 class CheckOutPage extends StatefulWidget{
   const CheckOutPage({super.key});
@@ -19,6 +25,7 @@ class CheckOutPage extends StatefulWidget{
 
 }
 class _CheckOutPageState extends State<StatefulWidget>{
+  
   final _picker = ImagePicker();
   late File _imageFile;
 
@@ -34,22 +41,74 @@ class _CheckOutPageState extends State<StatefulWidget>{
     });
   }
   
-  final List<Map<String, dynamic>> _cartItems = 
-  [
-      {'name': 'Sepatu Sneakers',
-      'image': 'assets/images/sneakers.jpg',
-      'price': 750000,
-      'quantity': 1,
-      },    
-      {'name': 'Tas Ransel',
-      'image': 'assets/images/backpack.jpg',
-      'price': 300000,
-      'quantity': 2,
-      },
-  ];
+
+
+  @override
+    void initState() {
+      super.initState();
+    }
   Key _formKey = GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context) {
+    TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+    TextEditingController nameController = TextEditingController(text: user.name);
+    TextEditingController phoneNumberController = TextEditingController(text: user.phone_number);
+    TextEditingController provinceController = TextEditingController(text: user.province);
+    TextEditingController cityController = TextEditingController(text: user.city);
+    TextEditingController subdistrictController = TextEditingController(text: user.subdistrict);
+    TextEditingController wardController = TextEditingController(text: user.ward);
+    TextEditingController streetController = TextEditingController(text: user.street);
+    TextEditingController zipController = TextEditingController(text: user.zip);
+
+    var expedition = transactionProvider.expedition;
+    var expeditions = expedition['expeditions'];
+
+    TextEditingController courierController = TextEditingController(text: expeditions[0]['name']);
+
+    List<Map<String, dynamic>> _cartItems = [];
+    handleCheckout() async{
+      // Mengambil path dari file gambar
+      String imagePath = _imageFile.path;
+
+      // Membuka file gambar
+      var imageFile = File(imagePath);
+
+      // Membaca konten gambar
+      List<int> imageBytes = await imageFile.readAsBytes();
+
+      // Mengencode konten gambar ke base64
+      String base64Image = base64Encode(imageBytes);
+
+      bool response = await transactionProvider.Checkout(
+        id: user.id!, 
+        token: user.token!,
+        name: nameController.text, 
+        phoneNumber:phoneNumberController.text,
+        province:provinceController.text,
+        city:cityController.text,
+        subdistrict:subdistrictController.text,
+        ward:wardController.text,
+        street:streetController.text,
+        zip:zipController.text,
+        courier:courierController.text,
+      );
+      if(response){
+        Navigator.pushNamed(context, '/home');
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: HexColor('#ED2B2A'),
+            content: Text(
+              'Gagal mengganti profil anda',
+              textAlign: TextAlign.center,
+            ),
+          )
+        );
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -133,16 +192,16 @@ class _CheckOutPageState extends State<StatefulWidget>{
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: nameController,
                                   decoration: theme().textInputDecoration('Nama Lengkap', 'Masukan nama lengkap'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: phoneNumberController,
                                   decoration: theme().textInputDecoration('No HP', 'Masukan nomor HP'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
@@ -168,51 +227,69 @@ class _CheckOutPageState extends State<StatefulWidget>{
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: provinceController,
                                   decoration: theme().textInputDecoration('Provinsi', 'Masukan provinsi'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: cityController,
                                   decoration: theme().textInputDecoration('Kota/Kab', 'Masukan kota/kab'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: subdistrictController,
                                   decoration: theme().textInputDecoration('Kecamatan', 'Masukan kecamatan'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: wardController,
                                   decoration: theme().textInputDecoration('Kelurahan', 'Masukan kelurahan'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: streetController,
                                   decoration: theme().textInputDecoration('Alamat Lengkap', 'Masukan alamat lengkap'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
                               ),
                               SizedBox(height: 10.0),
                               Container(
-                                child: TextField(
-                                  obscureText: true,
+                                child: TextFormField(
+                                  controller: zipController,
                                   decoration: theme().textInputDecoration('Kode Pos', 'Masukan kode pos'),
                                 ),
                                 decoration: theme().inputBoxDecorationShaddow(),
+                              ),
+                              SizedBox(height: 10.0),
+                              Container(
+                                child: DropdownButtonFormField<String>(
+                                  decoration: theme().textInputDecoration('Pengiriman', 'Pilih jasa pengiriman'),
+                                  value: courierController.text,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      courierController.text = newValue!;
+                                    });
+                                  },
+                                  items: expedition['expeditions'].map<DropdownMenuItem<String>>((expedition) {
+                                    return DropdownMenuItem<String>(
+                                      value: expedition['name'],
+                                      child: Text(expedition['name']),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                               SizedBox(height: 10.0),
                               Align(

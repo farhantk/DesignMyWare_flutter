@@ -8,6 +8,7 @@ import 'package:tubesflutter/pages/signin.dart';
 
 import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
+import 'checkout.dart';
 import 'profile.dart';
 import 'transaction.dart';
 
@@ -26,10 +27,7 @@ class _LandingPageState extends State<StatefulWidget> {
       'Home',
       style: optionStyle,
     ),
-    Text(
-      'Likes',
-      style: optionStyle,
-    ),
+    CheckOutPage(),
     TransactionPage(),
     CartPage(),
     ProfilePage(),
