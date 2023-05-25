@@ -45,6 +45,7 @@ class TransactionService{
       headers: headers,
       body: body
       );
+    print(body);
     print(response.statusCode);
     if (response.statusCode == 200) {
       print(json.decode(response.body));
@@ -72,7 +73,6 @@ class TransactionService{
       headers: headers,
       body: body
       );
-    print(response.statusCode);
     if (response.statusCode == 200) {
       print(json.decode(response.body));
       return json.decode(response.body);
