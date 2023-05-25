@@ -6,40 +6,40 @@ import 'package:tubesflutter/services/auth_service.dart';
 import '../models/user_model.dart';
 import '../services/transaction_service.dart';
 
-class TransactionProvider with ChangeNotifier{
+class TransactionProvider with ChangeNotifier {
   dynamic _order;
   dynamic _track;
 
   dynamic get order => _order;
   dynamic get track => _track;
 
-  set order(dynamic order){
+  set order(dynamic order) {
     _order = order;
     notifyListeners();
   }
 
   Future<dynamic> Showtransaction({
-    required int id, 
-    required String token, 
+    required int id,
+    required String token,
   }) async {
-    try{
+    try {
       dynamic order = await TransactionService().ShowTransaction(
         id: id,
         token: token,
       );
       _order = order;
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }
-  Future<dynamic> Track({
-    required String courierName, 
-    required String receipt_code, 
-    required String token, 
-  }) async {
 
-    try{
+  Future<dynamic> Track({
+    required String courierName,
+    required String receipt_code,
+    required String token,
+  }) async {
+    try {
       print('hey');
       dynamic track = await TransactionService().Track(
         courierName: courierName,
@@ -49,22 +49,22 @@ class TransactionProvider with ChangeNotifier{
       _track = track;
       print(_track);
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }
-  Future<dynamic> Finish({
-    required int orderId, 
-    required String token, 
-  }) async {
 
-    try{
+  Future<dynamic> Finish({
+    required int orderId,
+    required String token,
+  }) async {
+    try {
       dynamic finish = await TransactionService().Finish(
         orderId: orderId,
         token: token,
       );
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
   }

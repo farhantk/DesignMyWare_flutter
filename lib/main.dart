@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:tubesflutter/pages/cart_list.dart';
 import 'package:tubesflutter/pages/editprofile.dart';
 import 'package:tubesflutter/pages/landingpage.dart';
 import 'package:tubesflutter/pages/signup.dart';
 import 'package:tubesflutter/providers/auth_provider.dart';
+import 'package:tubesflutter/providers/cart_provider.dart';
 
 import 'pages/signin.dart';
 import 'pages/splash_screen.dart';
@@ -24,23 +26,26 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => TransactionProvider())
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         routes: {
-          '/': (context)=>SplashScreen(),
-          '/signin': (context)=>SignInPage(),
-          '/signup': (context)=>SignUpPage(),
-          '/home': (context)=>LandingPage(),
-          '/editprofile': (context)=>EditProfilePage(),
-          '/track': (context)=>TrackPage(courierName: '', receipt_code: '',),
+          '/': (context) => SplashScreen(),
+          '/signin': (context) => SignInPage(),
+          '/signup': (context) => SignUpPage(),
+          '/home': (context) => LandingPage(),
+          '/editprofile': (context) => EditProfilePage(),
+          '/cart': (context) => CartPage(),
+          '/track': (context) => TrackPage(
+                courierName: '',
+                receipt_code: '',
+              ),
         },
         theme: ThemeData(
           primaryColor: primary_color,
           accentColor: accent_color,
-
-
           primarySwatch: Colors.blue,
         ),
       ),
