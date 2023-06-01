@@ -18,15 +18,14 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<dynamic> showCart({
-    required int id,
     required String token,
   }) async {
     try {
       dynamic cart = await CartService().ShowCart(
-        id: id,
         token: token,
       );
       _cart = cart;
+      notifyListeners();
       return true;
     } catch (e) {
       return false;

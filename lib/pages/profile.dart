@@ -22,8 +22,7 @@ class _ProfilePageState extends State<StatefulWidget> {
   Key _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     UserModel? user = authProvider.user;
     return Scaffold(
       body: SingleChildScrollView(
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<StatefulWidget> {
               CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    NetworkImage('http://192.168.1.2:8000/storage/post-image/JKbIttOihjQeke1hhG8db9IPueKvN4vrrp2BZuZM.png'),
+                    AssetImage('assets/images/profile.jpg'),
               ),
               SizedBox(height: 20),
               Text(
@@ -104,8 +103,7 @@ class _ProfilePageState extends State<StatefulWidget> {
                 title: Text('Keluar'),
                 trailing: Icon(LineIcons.arrowLeft),
                 onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignInPage()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
                 },
               ),
             ],

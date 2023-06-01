@@ -4,7 +4,7 @@ import '../models/user_model.dart';
 import 'package:provider/provider.dart';
 
 class AuthService {
-  String baseUrl = 'http://10.0.2.2/api';
+  String baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<UserModel> SignUp(
       {required String name,
@@ -46,6 +46,7 @@ class AuthService {
       var data = jsonDecode(response.body);
       UserModel user = UserModel.fromJson(data);
       user.token = 'Bearer ' + data['access_token'];
+      print(user);
       return user;
     } else {
       var errorResponse = jsonDecode(response.body);
