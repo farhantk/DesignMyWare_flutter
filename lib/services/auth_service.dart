@@ -46,7 +46,6 @@ class AuthService {
       var data = jsonDecode(response.body);
       UserModel user = UserModel.fromJson(data);
       user.token = 'Bearer ' + data['access_token'];
-      print(user);
       return user;
     } else {
       var errorResponse = jsonDecode(response.body);

@@ -38,6 +38,7 @@ class TransactionProvider with ChangeNotifier {
   Future<dynamic> ShowExpedition() async {
     try {
       dynamic expedition = await TransactionService().ShowExpedition();
+      print('cek');
       _expedition = expedition;
       return true;
     } catch (e) {

@@ -80,6 +80,7 @@ class AuthProvider with ChangeNotifier{
         street:street,
         zip:zip, 
       );
+      
       _user = user;
       return true;
     }catch(e){

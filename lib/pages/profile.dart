@@ -34,7 +34,7 @@ class _ProfilePageState extends State<StatefulWidget> {
               CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    AssetImage('assets/images/profile.jpg'),
+                    NetworkImage('http://192.168.1.2:8000/storage/post-image/JKbIttOihjQeke1hhG8db9IPueKvN4vrrp2BZuZM.png'),
               ),
               SizedBox(height: 20),
               Text(
