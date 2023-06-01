@@ -22,7 +22,8 @@ class _ProfilePageState extends State<StatefulWidget> {
   Key _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     UserModel? user = authProvider.user;
     return Scaffold(
       body: SingleChildScrollView(
@@ -103,7 +104,8 @@ class _ProfilePageState extends State<StatefulWidget> {
                 title: Text('Keluar'),
                 trailing: Icon(LineIcons.arrowLeft),
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SignInPage()));
                 },
               ),
             ],

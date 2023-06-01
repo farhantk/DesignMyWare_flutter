@@ -35,6 +35,7 @@ class TransactionProvider with ChangeNotifier {
       return false;
     }
   }
+
   Future<dynamic> ShowExpedition() async {
     try {
       dynamic expedition = await TransactionService().ShowExpedition();
@@ -45,7 +46,7 @@ class TransactionProvider with ChangeNotifier {
       return false;
     }
   }
-  
+
   Future<dynamic> Track({
     required String courierName,
     required String receipt_code,
@@ -80,6 +81,7 @@ class TransactionProvider with ChangeNotifier {
       return false;
     }
   }
+
   Future<dynamic> Checkout({
     required int id,
     required String token,
@@ -97,15 +99,15 @@ class TransactionProvider with ChangeNotifier {
       dynamic checkout = await TransactionService().Checkout(
         id: id,
         token: token,
-        name: name, 
-        phoneNumber:phoneNumber,
-        province:province,
-        city:city,
-        subdistrict:subdistrict,
-        ward:ward,
-        street:street,
-        zip:zip,
-        courier:courier,
+        name: name,
+        phoneNumber: phoneNumber,
+        province: province,
+        city: city,
+        subdistrict: subdistrict,
+        ward: ward,
+        street: street,
+        zip: zip,
+        courier: courier,
       );
       return true;
     } catch (e) {
