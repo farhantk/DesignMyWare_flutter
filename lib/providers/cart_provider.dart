@@ -7,10 +7,8 @@ import '../services/cart_service.dart';
 
 class CartProvider with ChangeNotifier {
   dynamic _cart;
-  dynamic _cartDetail;
 
   dynamic get cart => _cart;
-  dynamic get cartDetail => _cartDetail;
 
   set cart(dynamic cart) {
     _cart = cart;
@@ -18,15 +16,33 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<dynamic> showCart({
+    required int id,
     required String token,
   }) async {
     try {
       dynamic cart = await CartService().ShowCart(
+        id: id,
         token: token,
       );
       _cart = cart;
-      notifyListeners();
-      return true;
+      return cart;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<dynamic> negotiatePrice({
+    required int id,
+    required int negotiatedPrice,
+    required String token,
+  }) async {
+    try {
+      dynamic response = await CartService().negotiatePrice(
+        id: id,
+        negotiatedPrice: negotiatedPrice,
+        token: token,
+      );
+      return response;
     } catch (e) {
       return false;
     }

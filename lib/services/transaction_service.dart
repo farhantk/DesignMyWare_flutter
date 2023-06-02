@@ -19,6 +19,7 @@ class TransactionService {
       throw Exception('Show transaction failed: $errorMessage');
     }
   }
+
   Future<dynamic> ShowTransaction({
     required int id,
     required String token,
@@ -46,11 +47,8 @@ class TransactionService {
       'courier': courierName,
       'receipt_code': receipt_code,
     });
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body
-      );
+    var response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
     print(body);
     print(response.statusCode);
     if (response.statusCode == 200) {
@@ -73,11 +71,8 @@ class TransactionService {
     var body = jsonEncode({
       'orderId': orderId,
     });
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body
-      );
+    var response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
     if (response.statusCode == 200) {
       print(json.decode(response.body));
       return json.decode(response.body);
@@ -88,6 +83,7 @@ class TransactionService {
       throw Exception('Show transaction failed: $errorMessage');
     }
   }
+
   Future<dynamic> Checkout({
     required int id,
     required String token,
@@ -102,27 +98,21 @@ class TransactionService {
     required String courier,
   }) async {
     var url = '$baseUrl/user/transaction/checkout';
-    var headers = {
-      'Content-Type': 'application/json', 
-      'Authorization': token
-    };
+    var headers = {'Content-Type': 'application/json', 'Authorization': token};
     var body = jsonEncode({
       'id': id,
-      'name': name, 
-      'phone_number':phoneNumber,
-      'province':province,
-      'city':city,
-      'subdistrict':subdistrict,
-      'ward':ward,
-      'street':street,
-      'zip':zip,
-      'courier':courier,
+      'name': name,
+      'phone_number': phoneNumber,
+      'province': province,
+      'city': city,
+      'subdistrict': subdistrict,
+      'ward': ward,
+      'street': street,
+      'zip': zip,
+      'courier': courier,
     });
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body
-      );
+    var response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
     if (response.statusCode == 200) {
       print(json.decode(response.body));
       return json.decode(response.body);
