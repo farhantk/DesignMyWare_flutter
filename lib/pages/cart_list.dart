@@ -20,13 +20,6 @@ class _CartPageState extends State<CartPage> {
     UserModel user = authProvider.user;
     CartProvider cartProvider = Provider.of<CartProvider>(context);
 
-    Future<void> getCartDetails() async {
-      await cartProvider.showCart(
-        id: user.id!,
-        token: user.token!,
-      );
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

@@ -32,10 +32,11 @@ class CartService {
         headers: headers, body: json.encode(body));
     if (response.statusCode == 200) {
       return json.decode(response.body);
+    } else if (response.statusCode == 422) {
+      throw Exception(
+          'Negotiation failed: Harga negosiasi tidak boleh sama dengan harga sebelumnya.');
     } else {
-      var errorResponse = jsonDecode(response.body);
-      var errorMessage = errorResponse['message'];
-      throw Exception('Negotiation failed: $errorMessage');
+      throw Exception('Negotiation failed: Terjadi kesalahan pada server.');
     }
   }
 
