@@ -31,19 +31,36 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  Future<dynamic> negotiatePrice({
+  Future<bool> negotiatePrice({
     required int id,
     required int negotiatedPrice,
     required String token,
   }) async {
     try {
-      dynamic response = await CartService().negotiatePrice(
+      await CartService().negotiatePrice(
         id: id,
         negotiatedPrice: negotiatedPrice,
         token: token,
       );
-      return response;
+      return true;
     } catch (e) {
+      print('Negotiation failed: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteCartItem({
+    required int id,
+    required String token,
+  }) async {
+    try {
+      await CartService().deleteCartItem(
+        id: id,
+        token: token,
+      );
+      return true;
+    } catch (e) {
+      print('Delete cart item failed: $e');
       return false;
     }
   }

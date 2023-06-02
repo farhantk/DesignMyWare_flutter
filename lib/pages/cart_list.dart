@@ -222,14 +222,35 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                       SizedBox(width: 10),
                                       ElevatedButton(
-                                        onPressed: () {
-                                          // Handle delete button click event
-                                          // You can show a confirmation dialog and
-                                          // delete the item if confirmed by the user
+                                        onPressed: () async {
+                                          bool deleteSuccess =
+                                              await cartProvider.deleteCartItem(
+                                            id: id,
+                                            token: user.token!,
+                                          );
+
+                                          if (deleteSuccess) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Item successfully deleted.'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Failed to delete item.'),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          }
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors
-                                              .red, // Ubah warna latar belakang tombol Negosiasi
+                                          backgroundColor: Colors.red,
                                         ),
                                         child: Text('Hapus'),
                                       ),
