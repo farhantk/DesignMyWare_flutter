@@ -28,8 +28,8 @@ class AuthService {
       return user;
     } else {
       var errorResponse = jsonDecode(response.body);
-      var errorMessage = errorResponse['message'];
-      throw Exception('SignUp failed: $errorMessage');
+      var errorMessage = errorResponse['error'];
+      throw Exception('$errorMessage');
     }
   }
 
@@ -49,9 +49,27 @@ class AuthService {
       print(user);
       return user;
     } else {
+      print(response.body);
       var errorResponse = jsonDecode(response.body);
-      var errorMessage = errorResponse['message'];
-      throw Exception('SignIn failed: $errorMessage');
+      var errorMessage = errorResponse['error'];
+      throw Exception('$errorMessage');
+    }
+  }
+  Future<bool> SignOut({
+    required String token,
+  }) async {
+    var url = '$baseUrl/signout';
+    var headers = {'Content-Type': 'application/json', 'Authorization': token};
+    var response =
+        await http.post(Uri.parse(url), headers: headers);
+    
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+      var errorResponse = jsonDecode(response.body);
+      var errorMessage = errorResponse['error'];
+      throw Exception('$errorMessage');
     }
   }
 

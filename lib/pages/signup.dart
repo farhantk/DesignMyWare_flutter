@@ -27,22 +27,24 @@ class _SignUpPageState extends State<StatefulWidget>{
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     handleSignUp() async{
-      if(await authProvider.SignUp(
+      try{
+        if(await authProvider.SignUp(
         name: nameController.text, 
         email: emailController.text, 
         password: passwordController.text, 
         confirmPassword: confirmPasswordController.text
       )){
         Navigator.pushNamed(context, '/home');
-      }else{
+      }
+      }catch(e){
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: HexColor('#ED2B2A'),
             content: Text(
-              'Gagal mendaftar',
+              '$e',
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         );
       }
     }

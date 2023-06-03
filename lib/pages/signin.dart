@@ -27,22 +27,25 @@ class _SignInPageState extends State<SignInPage>{
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
-    handleSignIn() async{
-      if(await authProvider.SignIn(
-        email: emailController.text, 
-        password: passwordController.text, 
-      )& await transactionProvider.ShowExpedition()){
-        print(transactionProvider.expedition);
-        Navigator.pushNamed(context, '/home');
-      }else{
+    handleSignIn() async {
+      try {
+        if (await authProvider.SignIn(
+              email: emailController.text,
+              password: passwordController.text,
+            ) &&
+            await transactionProvider.ShowExpedition()) {
+          print(transactionProvider.expedition);
+          Navigator.pushNamed(context, '/home');
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: HexColor('#ED2B2A'),
             content: Text(
-              'Gagal masuk',
+              '$e',
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         );
       }
     }

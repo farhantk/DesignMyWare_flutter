@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tubesflutter/pages/signup.dart';
@@ -24,6 +25,27 @@ class _ProfilePageState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     UserModel? user = authProvider.user;
+
+    handleSignOut() async {
+      try {
+        print('masuk');
+        if (await authProvider.SignOut(
+              token: user.token!,
+            ) ) {
+          Navigator.pushNamed(context, '/signin');
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: HexColor('#ED2B2A'),
+            content: Text(
+              '$e',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -102,9 +124,7 @@ class _ProfilePageState extends State<StatefulWidget> {
                 leading: Icon(LineIcons.doorOpen),
                 title: Text('Keluar'),
                 trailing: Icon(LineIcons.arrowLeft),
-                onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInPage()));
-                },
+                onTap: handleSignOut,
               ),
             ],
           ),

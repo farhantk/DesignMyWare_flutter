@@ -31,8 +31,7 @@ class AuthProvider with ChangeNotifier{
       _user = user;
       return true;
     }catch(e){
-      print(e);
-      return false;
+      throw Exception(e);
     }
   }
 
@@ -48,8 +47,19 @@ class AuthProvider with ChangeNotifier{
       _user = user;
       return true;
     }catch(e){
-      print(e);
-      return false;
+      throw Exception(e);
+    }
+  }
+  Future<bool> SignOut({
+    required String token, 
+  }) async {
+    try{
+      bool user = await AuthService().SignOut(
+        token: token, 
+      );
+      return true;
+    }catch(e){
+      throw Exception(e);
     }
   }
 
