@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
+import 'checkout.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -281,9 +282,7 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            // Handle delete button click event
-                            // You can show a confirmation dialog and
-                            // delete the item if confirmed by the user
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckOutPage()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors

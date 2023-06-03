@@ -8,6 +8,7 @@ import 'package:tubesflutter/pages/signup.dart';
 import 'package:tubesflutter/providers/auth_provider.dart';
 import 'package:tubesflutter/providers/cart_provider.dart';
 
+import 'pages/checkout.dart';
 import 'pages/signin.dart';
 import 'pages/splash_screen.dart';
 import 'pages/track.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => LandingPage(),
           '/editprofile': (context) => EditProfilePage(),
           '/cart': (context) => CartPage(),
+          '/checkout': (context) => CheckOutPage(),
           '/track': (context) => TrackPage(
                 courierName: '',
                 receipt_code: '',

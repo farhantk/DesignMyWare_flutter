@@ -27,7 +27,6 @@ class _LandingPageState extends State<StatefulWidget> {
       'Home',
       style: optionStyle,
     ),
-    CheckOutPage(),
     TransactionPage(),
     CartPage(),
     ProfilePage(),
@@ -68,10 +67,6 @@ class _LandingPageState extends State<StatefulWidget> {
                 GButton(
                   icon: LineIcons.home,
                   text: 'Beranda',
-                ),
-                GButton(
-                  icon: LineIcons.heart,
-                  text: 'Likes',
                 ),
                 GButton(
                   icon: LineIcons.creditCard,

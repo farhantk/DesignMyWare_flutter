@@ -117,6 +117,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
     }
 
     dynamic pesanan = cartProvider.cart;
+    print(pesanan);
     List<Map<String, dynamic>> _cartItems = [];
     return Scaffold(
       appBar: AppBar(
@@ -162,7 +163,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text('${item['product_name']} x ${item['jumlah_pesanan']}'),
-                                      Text('Rp. ${item['product_price']}'),
+                                      Text('Rp. ${item['subtotal']}'),
                                     ],
                                   ),
                                 );
@@ -186,7 +187,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
                                 style: TextStyle(color: Colors.black),
                               ),
                               Text(
-                                'Rp. 1000000',
+                                'Rp. ${pesanan['total_harga']}',
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
