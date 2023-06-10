@@ -27,20 +27,7 @@ class CheckOutPage extends StatefulWidget{
 }
 class _CheckOutPageState extends State<StatefulWidget>{
   
-  final _picker = ImagePicker();
-  late File _imageFile;
-
-  Future<void> _getImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
+  
   
 
 
@@ -69,44 +56,62 @@ class _CheckOutPageState extends State<StatefulWidget>{
     var expeditions = expedition['expeditions'];
 
     TextEditingController courierController = TextEditingController(text: expeditions[0]['name']);
-    handleCheckout() async{
-      // Mengambil path dari file gambar
-      String imagePath = _imageFile.path;
+    final picker = ImagePicker();
+    File? _image;
 
-      // Membuka file gambar
-      var imageFile = File(imagePath);
+    Future getImage() async {
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    }
 
-      // Membaca konten gambar
-      List<int> imageBytes = await imageFile.readAsBytes();
+    handleCheckout() async {
+      if (_image != null) {
+        String imagePath = _image!.path;
+        var imageFile = File(imagePath);
+        List<int> imageBytes = await imageFile.readAsBytes();
+        String base64Image = base64Encode(imageBytes);
+        print('masuk');
+        bool response = await transactionProvider.Checkout(
+          id: user.id!, 
+          token: user.token!,
+          name: nameController.text, 
+          phoneNumber: phoneNumberController.text,
+          province: provinceController.text,
+          city: cityController.text,
+          subdistrict: subdistrictController.text,
+          ward: wardController.text,
+          street: streetController.text,
+          zip: zipController.text,
+          courier: courierController.text,
+          paymentreceipt: base64Image, // Menggunakan base64Image sebagai string gambar yang diencode
+        );
 
-      // Mengencode konten gambar ke base64
-      String base64Image = base64Encode(imageBytes);
-      
-      bool response = await transactionProvider.Checkout(
-        id: user.id!, 
-        token: user.token!,
-        name: nameController.text, 
-        phoneNumber:phoneNumberController.text,
-        province:provinceController.text,
-        city:cityController.text,
-        subdistrict:subdistrictController.text,
-        ward:wardController.text,
-        street:streetController.text,
-        zip:zipController.text,
-        courier:courierController.text,
-        paymentreceipt: File('fsd')
-      );
-      if(response){
-        Navigator.pushNamed(context, '/home');
-      }else{
+        if (response) {
+          Navigator.pushNamed(context, '/home');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: HexColor('#ED2B2A'),
+              content: Text(
+                'Gagal mengganti profil anda',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: HexColor('#ED2B2A'),
             content: Text(
-              'Gagal mengganti profil anda',
+              'Silakan pilih gambar terlebih dahulu',
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         );
       }
     }
@@ -414,7 +419,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              // TODO: Tambahkan kode untuk mengambil gambar dari galeri
+                                              getImage();
                                             },
                                             child: Container(
                                               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),

@@ -49,11 +49,11 @@ class TransactionProvider with ChangeNotifier {
     required String street,
     required String zip,
     required String courier,
-    required File paymentreceipt,
+    required String paymentreceipt,
 
   }) async {
     try {
-      print('masuk');
+      print('cek cek');
       dynamic checkout = await TransactionService().Checkout(
         id: id,
         token: token,

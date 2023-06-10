@@ -97,7 +97,7 @@ class TransactionService {
     required String street,
     required String zip,
     required String courier,
-    required File paymentreceipt,
+    required String paymentreceipt,
   }) async {
     var url = '$baseUrl/user/transaction/checkout';
     var headers = {'Authorization': token};
@@ -114,13 +114,10 @@ class TransactionService {
     request.fields['street'] = street;
     request.fields['zip'] = zip;
     request.fields['courier'] = courier;
-    request.files.add(await http.MultipartFile.fromPath(
-      'paymentreceipt',
-      paymentreceipt.path,
-    ));
+    request.fields['paymentreceipt'] = paymentreceipt;
 
     var response = await request.send();
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       var responseData = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseData);
