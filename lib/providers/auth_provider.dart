@@ -45,6 +45,7 @@ class AuthProvider with ChangeNotifier{
         password: password, 
       );
       _user = user;
+      print(_user);
       return true;
     }catch(e){
       throw Exception(e);

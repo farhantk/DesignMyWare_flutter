@@ -81,7 +81,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
 
       // Mengencode konten gambar ke base64
       String base64Image = base64Encode(imageBytes);
-
+      
       bool response = await transactionProvider.Checkout(
         id: user.id!, 
         token: user.token!,
@@ -94,6 +94,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
         street:streetController.text,
         zip:zipController.text,
         courier:courierController.text,
+        paymentreceipt: File('fsd')
       );
       if(response){
         Navigator.pushNamed(context, '/home');
@@ -109,6 +110,7 @@ class _CheckOutPageState extends State<StatefulWidget>{
         );
       }
     }
+    
     Future<void> getCartDetails() async {
       await cartProvider.showCart(
         id: user.id!,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/user_model.dart';
 import 'package:provider/provider.dart';
@@ -96,31 +97,41 @@ class TransactionService {
     required String street,
     required String zip,
     required String courier,
+    required File paymentreceipt,
   }) async {
     var url = '$baseUrl/user/transaction/checkout';
-    var headers = {'Content-Type': 'application/json', 'Authorization': token};
-    var body = jsonEncode({
-      'id': id,
-      'name': name,
-      'phone_number': phoneNumber,
-      'province': province,
-      'city': city,
-      'subdistrict': subdistrict,
-      'ward': ward,
-      'street': street,
-      'zip': zip,
-      'courier': courier,
-    });
-    var response =
-        await http.post(Uri.parse(url), headers: headers, body: body);
+    var headers = {'Authorization': token};
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    request.headers.addAll(headers);
+    request.fields['id'] = id.toString();
+    request.fields['name'] = name;
+    request.fields['phone_number'] = phoneNumber;
+    request.fields['province'] = province;
+    request.fields['city'] = city;
+    request.fields['subdistrict'] = subdistrict;
+    request.fields['ward'] = ward;
+    request.fields['street'] = street;
+    request.fields['zip'] = zip;
+    request.fields['courier'] = courier;
+    request.files.add(await http.MultipartFile.fromPath(
+      'paymentreceipt',
+      paymentreceipt.path,
+    ));
+
+    var response = await request.send();
+
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
-      return json.decode(response.body);
+      var responseData = await response.stream.bytesToString();
+      var jsonResponse = json.decode(responseData);
+      print(jsonResponse);
+      return jsonResponse;
     } else {
-      var errorResponse = jsonDecode(response.body);
-      var errorMessage = errorResponse['message'];
-      print(errorMessage);
-      throw Exception('Show transaction failed: $errorMessage');
+      var errorMessage = await response.stream.bytesToString();
+      var errorResponse = jsonDecode(errorMessage);
+      var error = errorResponse['message'];
+      print(error);
+      throw Exception('Show transaction failed: $error');
     }
   }
 }

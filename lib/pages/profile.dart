@@ -25,10 +25,8 @@ class _ProfilePageState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     UserModel? user = authProvider.user;
-
     handleSignOut() async {
       try {
-        print('masuk');
         if (await authProvider.SignOut(
               token: user.token!,
             ) ) {
@@ -56,7 +54,7 @@ class _ProfilePageState extends State<StatefulWidget> {
               CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    AssetImage('assets/images/profile.jpg'),
+                    NetworkImage('http://192.168.1.2:8000/storage/${user?.photo}'),
               ),
               SizedBox(height: 20),
               Text(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,42 @@ class TransactionProvider with ChangeNotifier {
         token: token,
       );
       _order = order;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  Future<dynamic> Checkout({
+    required int id,
+    required String token,
+    required String name,
+    required String phoneNumber,
+    required String province,
+    required String city,
+    required String subdistrict,
+    required String ward,
+    required String street,
+    required String zip,
+    required String courier,
+    required File paymentreceipt,
+
+  }) async {
+    try {
+      print('masuk');
+      dynamic checkout = await TransactionService().Checkout(
+        id: id,
+        token: token,
+        name: name,
+        phoneNumber: phoneNumber,
+        province: province,
+        city: city,
+        subdistrict: subdistrict,
+        ward: ward,
+        street: street,
+        zip: zip,
+        courier: courier,
+        paymentreceipt: paymentreceipt,
+      );
       return true;
     } catch (e) {
       return false;
@@ -81,36 +119,4 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  Future<dynamic> Checkout({
-    required int id,
-    required String token,
-    required String name,
-    required String phoneNumber,
-    required String province,
-    required String city,
-    required String subdistrict,
-    required String ward,
-    required String street,
-    required String zip,
-    required String courier,
-  }) async {
-    try {
-      dynamic checkout = await TransactionService().Checkout(
-        id: id,
-        token: token,
-        name: name,
-        phoneNumber: phoneNumber,
-        province: province,
-        city: city,
-        subdistrict: subdistrict,
-        ward: ward,
-        street: street,
-        zip: zip,
-        courier: courier,
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 }
