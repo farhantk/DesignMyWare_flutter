@@ -5,6 +5,7 @@ import 'package:tubesflutter/pages/cart_list.dart';
 import 'package:tubesflutter/pages/editprofile.dart';
 import 'package:tubesflutter/pages/landingpage.dart';
 import 'package:tubesflutter/pages/signup.dart';
+import 'package:tubesflutter/pages/widgets/navbar.dart';
 import 'package:tubesflutter/providers/auth_provider.dart';
 import 'package:tubesflutter/providers/cart_provider.dart';
 

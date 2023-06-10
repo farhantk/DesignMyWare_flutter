@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:tubesflutter/pages/cart_list.dart';
+import 'package:tubesflutter/pages/homepage.dart';
 import 'package:tubesflutter/pages/signin.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:tubesflutter/pages/cart_list.dart';
 import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
 import 'checkout.dart';
