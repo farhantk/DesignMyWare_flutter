@@ -217,30 +217,64 @@ class _CartPageState extends State<CartPage> {
                                       SizedBox(width: 10),
                                       ElevatedButton(
                                         onPressed: () async {
-                                          bool deleteSuccess =
-                                              await cartProvider.deleteCartItem(
-                                            id: id,
-                                            token: user.token!,
+                                          bool confirmDelete = await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Konfirmasi'),
+                                                content: Text(
+                                                    'Apakah Anda yakin ingin menghapus item ini?'),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      // Mengembalikan nilai `true` jika pengguna ingin menghapus item
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    },
+                                                    child: Text('Ya'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      // Mengembalikan nilai `false` jika pengguna tidak ingin menghapus item
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                    child: Text('Tidak'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
                                           );
 
-                                          if (deleteSuccess) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Item successfully deleted.'),
-                                                duration: Duration(seconds: 2),
-                                              ),
+                                          if (confirmDelete == true) {
+                                            bool deleteSuccess =
+                                                await cartProvider
+                                                    .deleteCartItem(
+                                              id: id,
+                                              token: user.token!,
                                             );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Failed to delete item.'),
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
+
+                                            if (deleteSuccess) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Item successfully deleted.'),
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                ),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Failed to delete item.'),
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                ),
+                                              );
+                                            }
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -282,7 +316,10 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CheckOutPage()));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CheckOutPage()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors
